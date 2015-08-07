@@ -407,7 +407,7 @@ public class TwoPlayer extends javax.swing.JPanel implements MouseListener {
     private javax.swing.JLabel lblplayer2wins;
     // End of variables declaration//GEN-END:variables
 
-    public void updateWindow(int number, ImageIcon pic1) {
+    public void updateWindow(int number, ImageIcon pic1) {//drawing the images on lables
         switch (number) {
             case 1:
                 jLabel1.setIcon(pic1);
@@ -465,7 +465,7 @@ public class TwoPlayer extends javax.swing.JPanel implements MouseListener {
         }
     }
 
-    void lockScreen() {
+    void lockScreen() {//lock the screen when it should not be allowed to click
         jLabel1.removeMouseListener(this);
         jLabel2.removeMouseListener(this);
         jLabel3.removeMouseListener(this);
@@ -491,7 +491,7 @@ public class TwoPlayer extends javax.swing.JPanel implements MouseListener {
 
     }
 
-    void reset() {
+    void reset() {//reset the game window to begining
         jLabel1.setIcon(null);
         jLabel2.setIcon(null);
         jLabel3.setIcon(null);
@@ -514,14 +514,14 @@ public class TwoPlayer extends javax.swing.JPanel implements MouseListener {
 
     }
 
-    void updateDatabase(int pl1wins, int pl2wins, int draws, String player1, String player2) {
+    void updateDatabase(int pl1wins, int pl2wins, int draws, String player1, String player2) {//writing data into database
         String sql = "";
         sql = "UPDATE twoplayer SET player1wins = '" + pl1wins + "',player2wins = '" + pl2wins + "',draws = '" + draws + "' WHERE player1name = '" + player1 + "' and player2name = '" + player2 + "' ORDER BY twoplayer.id DESC LIMIT 1";
         dbcon.putData(sql);
 
     }
     
-     Vector<Vector<String>> viewDatabase() {
+     Vector<Vector<String>> viewDatabase() {//veiwing the database
         Vector<Vector<String>> twod = new Vector<Vector<String>>();
         try {
             String sql  = "";           

@@ -59,7 +59,7 @@ public class SingleStats extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Name", "Wins", "Loses", "Draws"
+                "Wins", "Loses", "Draws", "Name"
             }
         ));
         jScrollPane1.setViewportView(tblSinglePlayer);

@@ -33,7 +33,7 @@ public class Server {
             oos = new ObjectOutputStream(socket.getOutputStream());
             ois = new ObjectInputStream(socket.getInputStream());
         } catch (IOException e) {
-            System.out.println("No client found..");
+            e.printStackTrace();
         }
         InetAddress inet = socket.getInetAddress();
         System.out.println("Server address : " + inet.getHostAddress());

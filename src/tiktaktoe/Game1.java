@@ -29,6 +29,7 @@ public class Game1 extends javax.swing.JPanel implements MouseListener {
     Server server1 = null;
     ImageIcon pic1 = new ImageIcon(getClass().getResource("/Img/playerImg1.jpg"));
     ImageIcon pic2 = new ImageIcon(getClass().getResource("/Img/playerImg2.jpg"));
+    String initialText = "Enter your initial text here";
 
     public Game1() {
         initComponents();
@@ -46,6 +47,16 @@ public class Game1 extends javax.swing.JPanel implements MouseListener {
         for (int i = 0; i < state.length; i++) {
             state[i] = 2;
         }
+        txtserverIP.setToolTipText("Enter Server IP");
+        initialText = "Enter server ip address here";
+        txtserverIP.setText(initialText);
+        txtserverIP.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                if (txtserverIP.getText().equals(initialText)) {
+                    txtserverIP.selectAll();
+                }
+            }
+        });
     }
 
     /**
@@ -65,6 +76,7 @@ public class Game1 extends javax.swing.JPanel implements MouseListener {
         btncreateServer = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
+        txtserverIP = new javax.swing.JTextField();
         jPanel11 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -155,7 +167,8 @@ public class Game1 extends javax.swing.JPanel implements MouseListener {
                     .addGroup(jPanel10Layout.createSequentialGroup()
                         .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(cmbType, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btncreateServer, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(btncreateServer, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtserverIP, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -170,6 +183,8 @@ public class Game1 extends javax.swing.JPanel implements MouseListener {
                 .addComponent(cmbType, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btncreateServer, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(41, 41, 41)
+                .addComponent(txtserverIP, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -400,8 +415,9 @@ public class Game1 extends javax.swing.JPanel implements MouseListener {
     }//GEN-LAST:event_jTextField1ActionPerformed
 
     private void btncreateServerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btncreateServerActionPerformed
-        if (cmbType.getSelectedItem().toString() == "Server") {
+        if (cmbType.getSelectedItem().toString().equals("Server")) {
             this.type = "server";
+            txtserverIP.setEditable(false);
             server1 = new Server();
 
             new Thread() {
@@ -416,10 +432,11 @@ public class Game1 extends javax.swing.JPanel implements MouseListener {
                                 updateArray(Integer.parseInt(msg));
                                 updateWindow(Integer.parseInt(msg), pic1);
                                 boolean win = checkWinningMoment();
-                                boolean draw =  checkdraw();
-                                showMessage(win,draw, playerState);
-                                if(win||draw){
+                                boolean draw = checkdraw();
+                                showMessage(win, draw, playerState);
+                                if (win || draw) {
                                     reset();
+                                    lockScreen();
                                 }
                             }
                             activateScreen();
@@ -432,9 +449,14 @@ public class Game1 extends javax.swing.JPanel implements MouseListener {
                 }
             }.start();
 
-        } else if (cmbType.getSelectedItem().toString() == "Client") {
+        } else if (cmbType.getSelectedItem().toString().equals("Client")) {
             this.type = "client";
-            client1 = new Client();
+            if (txtserverIP.getText().equals("Enter server ip address here")) {
+                client1 = new Client();
+            } else {
+                client1 = new Client(txtserverIP.getText());
+            }
+
             new Thread() {
                 public void run() {
                     while (true) {
@@ -448,8 +470,8 @@ public class Game1 extends javax.swing.JPanel implements MouseListener {
                                 updateWindow(Integer.parseInt(msg), pic2);
                                 boolean win = checkWinningMoment();
                                 boolean draw = checkdraw();
-                                showMessage(win,draw, playerState);
-                                if(win || draw){
+                                showMessage(win, draw, playerState);
+                                if (win || draw) {
                                     reset();
                                 }
                             }
@@ -473,10 +495,10 @@ public class Game1 extends javax.swing.JPanel implements MouseListener {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        if (this.type == "server") {
+        if (this.type.equals("server")) {
             server1.informClient("20");
         }
-        if (this.type == "client") {
+        if (this.type.equals("client")) {
             client1.informServer("20");
         }
         reset();
@@ -514,6 +536,7 @@ public class Game1 extends javax.swing.JPanel implements MouseListener {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField txtserverIP;
     // End of variables declaration//GEN-END:variables
 
     @Override
@@ -522,7 +545,7 @@ public class Game1 extends javax.swing.JPanel implements MouseListener {
         sendinfo(me.getComponent().getName());
         playerState = true;
         updateArray(Integer.parseInt(me.getComponent().getName()));
-        if (this.type == "server") {
+        if (this.type.equals("server")) {
             updateWindow(Integer.parseInt(me.getComponent().getName()), server1.pic2);
         } else {
             updateWindow(Integer.parseInt(me.getComponent().getName()), client1.pic1);
@@ -530,8 +553,8 @@ public class Game1 extends javax.swing.JPanel implements MouseListener {
 
         boolean win = checkWinningMoment();
         boolean draw = checkdraw();
-        showMessage(win,draw, playerState);
-        if(win||draw){
+        showMessage(win, draw, playerState);
+        if (win || draw) {
             reset();
         }
         lockScreen();
@@ -548,10 +571,11 @@ public class Game1 extends javax.swing.JPanel implements MouseListener {
     }
 
     void sendinfo(String number) {
-        if (this.type == "server") {
+        System.out.println("call 1 hereeeee.........");
+        if (this.type.equals("server")) {
             server1.informClient(number);
         }
-        if (this.type == "client") {
+        if (this.type.equals("client")) {
             client1.informServer(number);
         }
     }
@@ -635,7 +659,7 @@ public class Game1 extends javax.swing.JPanel implements MouseListener {
         }
         return false;
     }
-    
+
     boolean checkdraw() {
         for (int i = 0; i < state.length; i++) {
             if (state[i] == 2) {
@@ -648,7 +672,7 @@ public class Game1 extends javax.swing.JPanel implements MouseListener {
         return true;
     }
 
-    void showMessage(Boolean foo,Boolean draw, Boolean playerstate) {
+    void showMessage(Boolean foo, Boolean draw, Boolean playerstate) {
         if (foo) {
             if (playerState == true) {
                 JOptionPane.showMessageDialog(this, "You Wins the Game");

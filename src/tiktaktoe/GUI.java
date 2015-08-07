@@ -35,7 +35,7 @@ public class GUI extends javax.swing.JPanel implements MouseListener {
     ImageIcon pic1 = new ImageIcon(getClass().getResource("/Img/playerImg1.jpg"));
     ImageIcon pic2 = new ImageIcon(getClass().getResource("/Img/playerImg2.jpg"));
     ArrayList<Integer> list;
-    int numofwins;
+    int numofwins; // variables to store loses and wins
     int numofloses;
     int numofdraws;
 
@@ -403,7 +403,7 @@ public class GUI extends javax.swing.JPanel implements MouseListener {
 
     private void btnNewGameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewGameActionPerformed
         // TODO add your handling code here:
-        reset();
+        reset();//reset the screen when starting a new game
         activateScreen();
         list = new ArrayList<Integer>();
         for (int i = 1; i <= 9; i++) {
@@ -468,7 +468,7 @@ public class GUI extends javax.swing.JPanel implements MouseListener {
         }
     }
 
-    public void updateWindow(int number, ImageIcon pic1) {
+    public void updateWindow(int number, ImageIcon pic1) {//set to appear image on lables
         switch (number) {
             case 1:
                 jLabel1.setIcon(pic1);
@@ -526,7 +526,7 @@ public class GUI extends javax.swing.JPanel implements MouseListener {
         }
     }
 
-    public boolean checkWinningMoment() {
+    public boolean checkWinningMoment() {//check whether the is a winning moment
         if (state[0] == state[1] && state[1] == state[2] && state[1] != 2) {
             return true;
         } else if (state[0] == state[3] && state[3] == state[6] && state[3] != 2) {
@@ -547,7 +547,7 @@ public class GUI extends javax.swing.JPanel implements MouseListener {
         return false;
     }
 
-    boolean checkdraw() {
+    boolean checkdraw() {//check whether there is a draw moment
         for (int i = 0; i < state.length; i++) {
             if (state[i] == 2) {
                 return false;
@@ -559,7 +559,7 @@ public class GUI extends javax.swing.JPanel implements MouseListener {
         return true;
     }
 
-    void showMessage(boolean foo, boolean draw, boolean playerstate) {
+    void showMessage(boolean foo, boolean draw, boolean playerstate) {//showing relevent message
         if (foo) {
             if (playerState == true) {
                 JOptionPane.showMessageDialog(this, "You Win the Game");
@@ -581,7 +581,7 @@ public class GUI extends javax.swing.JPanel implements MouseListener {
         lblname.setText(name);
     }
 
-    void reset() {
+    void reset() {//reset the game window to begining
         jLabel1.setIcon(null);
         jLabel2.setIcon(null);
         jLabel3.setIcon(null);
@@ -597,7 +597,7 @@ public class GUI extends javax.swing.JPanel implements MouseListener {
         this.playerState = true;
     }
 
-    void lockScreen() {
+    void lockScreen() {//lock the screen when it should not be allowed to click
         jLabel1.removeMouseListener(this);
         jLabel2.removeMouseListener(this);
         jLabel3.removeMouseListener(this);
@@ -630,7 +630,7 @@ public class GUI extends javax.swing.JPanel implements MouseListener {
         updateDatabase(wins, loses, draws, name);
     }
 
-    void updateDatabase(int wins, int loses, int draws, String player) {
+    void updateDatabase(int wins, int loses, int draws, String player) {//writing data into database
         String sql = "";
         if (mode == 0) {
             sql = "UPDATE easymode SET wins = '" + wins + "' ,loses = '" + loses + "' ,draws = '" + draws + "' WHERE name = '" + player + "' ORDER BY easymode.id DESC LIMIT 1";
@@ -641,7 +641,7 @@ public class GUI extends javax.swing.JPanel implements MouseListener {
         }
     }
 
-    Vector<Vector<String>> viewDatabase() {
+    Vector<Vector<String>> viewDatabase() {//veiwing the database
         Vector<Vector<String>> twod = new Vector<Vector<String>>();
         try {
             String sql  = "";
